@@ -2,74 +2,75 @@ package main
 
 import "fmt"
 
-type PizzaType int
+type BurgerType int
 
-type PizzaSize int
+type BurgerSize float64
+
+func (b BurgerSize) String() string {
+	switch b {
+	case Big:
+		return "Big"
+	case Double:
+		return "Double"
+	case Triple:
+		return "Triple"
+	}
+	return ""
+}
 
 const (
-	Margherita PizzaType = iota
-	Pepperoni
-	Diablo
-	R25 PizzaSize = 25
-	R30 PizzaSize = 30
-	R35 PizzaSize = 35
+	Classic BurgerType = iota
+	CheeseBurger
+	FatJoe
+	Big    BurgerSize = 1
+	Double BurgerSize = 1.25
+	Triple BurgerSize = 1.5
 )
 
-type pizza struct {
-	Type  PizzaType
-	Size  PizzaSize
+type burger struct {
+	Type  BurgerType
+	Size  BurgerSize
 	Price float64
 }
 
-func (p *pizza) getPrice() float64 {
-	typeMap := map[PizzaType]float64{
-		Margherita: 1700,
-		Pepperoni:  2000,
-		Diablo:     2200,
+func (p *burger) getPrice() float64 {
+	typeMap := map[BurgerType]float64{
+		Classic:      1700,
+		CheeseBurger: 2000,
+		FatJoe:       2200,
 	}
 
-	sizeMap := map[PizzaSize]float64{
-		R25: 1,
-		R30: 1.25,
-		R35: 1.5,
-	}
-
-	return typeMap[p.Type] * sizeMap[p.Size]
+	return typeMap[p.Type] * float64(p.Size)
 }
 
-func (p *pizza) String() string {
-	return fmt.Sprintf("This is %s pizza of size %v. Price: %.2f", p.Type.String(), p.Size, p.getPrice())
+func (p *burger) String() string {
+	return fmt.Sprintf("This is %s burger of %v size. Price: %.2f", p.Type.String(), p.Size, p.getPrice())
 }
 
-type Pizza interface {
+type Burger interface {
 	getPrice() float64
 	String() string
 }
 
-func (p PizzaType) String() string {
-	return [...]string{"Margherita", "Pepperoni", "Diablo"}[p]
+func (p BurgerType) String() string {
+	return [...]string{"Classic", "CheeseBurger", "FatJoe"}[p]
 }
 
-func newPizzaFactory(name string, size PizzaSize) Pizza {
-	priceMap := make(map[PizzaSize]float64)
-	priceMap[R25] = 1
-	priceMap[R30] = 1.25
-	priceMap[R35] = 1.5
-
-	switch name {
-	case Margherita.String():
-		return &pizza{
-			Type: Margherita,
+func newBurgerFactory(b BurgerType, size BurgerSize) Burger {
+	switch b {
+	case Classic:
+		return &burger{
+			Type: Classic,
 			Size: size,
 		}
-	case Pepperoni.String():
-		return &pizza{
-			Type: Pepperoni,
+	case CheeseBurger:
+		return &burger{
+			Type: CheeseBurger,
 			Size: size,
 		}
-	case Diablo.String():
-		return &pizza{
-			Type: Diablo,
+	case FatJoe:
+		return &burger{
+			Type: FatJoe,
 			Size: size,
 		}
 	default:
