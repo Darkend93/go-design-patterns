@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	fj := newBurgerFactory(FatJoe, Big)
+	fj := newBurgerFactory(Classic, Big)
 	cb := newBurgerFactory(CheeseBurger, Double)
 	// pollo := newBurgerFactory("Pollo", 40)
 
